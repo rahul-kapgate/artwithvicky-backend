@@ -24,7 +24,7 @@ This code is valid for 5 minutes. Please do not share it with anyone.
 If you did not request this, please disregard this message.
 
 Best regards,  
-Employee App Team`,
+Artistic Vicky Team`,
   };
 
   await transporter.sendMail(mailOptions);
