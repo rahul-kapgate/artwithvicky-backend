@@ -6,11 +6,13 @@ import userRoutes from "./src/routes/userRoutes.js";
 dotenv.config();
 connectDB();
 
+const PORT = process.env.PORT || 8000;
+
 const app = express();
 app.use(express.json()); // to parse JSON body
 
 app.use("/api/users", userRoutes);
 
-app.listen(5000, () => {
-  console.log("🚀 Server is running on port 5000");
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
