@@ -14,7 +14,7 @@ export const sendOtpToEmail = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Verification Code - Employee App",
+    subject: "Verification Code - Artistic Vicky",
     text: `Dear User,
 
 Your One-Time Password (OTP) is: ${otp}
