@@ -2,7 +2,11 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.model.js";
 import { storeOtp, getOtpData } from "../../src/utils/otpStore.js";
 import { sendOtpToEmail } from "../services/emailService.js"; 
-
+import jwt from "jsonwebtoken";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/tokenUtils.js"; 
 
 // 1️⃣ Initiate Signup (Send OTP to email)
 export const initiateUserSignup = async (req, res) => {
@@ -79,15 +83,47 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // 3. Successful login
+    // 3. Generate tokens
+    const payload = { userId: user._id, email: user.email };
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    // 4. Respond with tokens
     res.status(200).json({
       message: "Login successful",
       userId: user._id,
       fullName: user.fullName,
       email: user.email,
+      accessToken,
+      refreshToken,
     });
   } catch (error) {
     console.error("❌ Login Error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+export const refreshAccessToken = (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token required" });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    const newAccessToken = generateAccessToken({
+      userId: decoded.userId,
+      email: decoded.email,
+    });
+
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (err) {
+    console.error("❌ Refresh Token Error:", err.message);
+    res.status(403).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
