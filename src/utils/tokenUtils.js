@@ -18,3 +18,5 @@ export const generateRefreshToken = (payload) => {
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
 };
+
+
