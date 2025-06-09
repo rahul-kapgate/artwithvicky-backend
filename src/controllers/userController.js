@@ -84,7 +84,7 @@ export const loginUser = async (req, res) => {
     }
 
     // 3. Generate tokens
-    const payload = { userId: user._id, email: user.email };
+    const payload = { userId: user._id, email: user.email, role: user.role };
 
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
@@ -95,6 +95,8 @@ export const loginUser = async (req, res) => {
       userId: user._id,
       fullName: user.fullName,
       email: user.email,
+      role: user.role,
+      authorizedCourses : user.authorizedCourses,
       accessToken,
       refreshToken,
     });
