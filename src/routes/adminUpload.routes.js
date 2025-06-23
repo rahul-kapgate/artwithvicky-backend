@@ -1,6 +1,10 @@
 import express from "express";
 import multer from "multer";
-import { uploadFile } from "../controllers/adminUpload.controller.js";
+import {
+  uploadFile,
+  getAllResources,
+  getResourceById,
+} from "../controllers/adminUpload.controller.js";
 import fs from "fs";
 
 const router = express.Router();
@@ -19,5 +23,7 @@ const upload = multer({
 
 // POST /api/admin/upload
 router.post("/upload", upload.single("file"), uploadFile);
+router.get("/resources", getAllResources);
+router.get("/resources/:id", getResourceById);
 
 export default router;
