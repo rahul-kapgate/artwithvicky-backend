@@ -89,6 +89,8 @@ export const loginUser = async (req, res) => {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
+    console.log(`${user.fullName} Loggedin`)
+
     // 4. Respond with tokens
     res.status(200).json({
       message: "Login successful",
