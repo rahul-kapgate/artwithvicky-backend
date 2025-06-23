@@ -4,6 +4,7 @@ import cors from "cors"; // ✅ Import CORS
 import connectDB from "./src/config/db.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import adminRoute from "./src/routes/admin.routes.js";
+import adminUploadRoutes from "./src/routes/adminUpload.routes.js";
 
 dotenv.config();
 connectDB();
@@ -22,10 +23,12 @@ app.use(
 
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoute);
+app.use("/api/admin", adminUploadRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
