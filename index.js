@@ -5,6 +5,7 @@ import connectDB from "./src/config/db.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import adminRoute from "./src/routes/admin.routes.js";
 import adminUploadRoutes from "./src/routes/adminUpload.routes.js";
+import mockTestRoutes from "./src/routes/mockTest.routes.js";
 
 dotenv.config();
 connectDB();
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoute);
 app.use("/api/admin", adminUploadRoutes);
+app.use("/api/mocktest", mockTestRoutes); 
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
