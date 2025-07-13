@@ -131,3 +131,46 @@ export const refreshAccessToken = (req, res) => {
   }
 };
 
+// 1️⃣ Initiate Forgot Password (Send OTP)
+export const initiateForgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Email not registered" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    await storeOtp(email, { otp }); // just store OTP for reset
+
+    await sendOtpToEmail(email, otp);
+
+    res.status(200).json({ message: "OTP sent to email for password reset" });
+  } catch (err) {
+    console.error("❌ Forgot Password - OTP Send Error:", err.message);
+    res.status(500).json({ message: "Failed to send OTP" });
+  }
+};
+
+// 2️⃣ Verify OTP and Reset Password
+export const verifyForgotPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    const data = await getOtpData(email, otp);
+    if (!data) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await User.updateOne({ email }, { $set: { password: hashedPassword } });
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (err) {
+    console.error("❌ Forgot Password - Reset Error:", err.message);
+    res.status(500).json({ message: "Failed to reset password" });
+  }
+};
