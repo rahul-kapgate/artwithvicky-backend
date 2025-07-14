@@ -8,6 +8,8 @@ import {
 import fs from "fs";
 import {
   UploadImage,
+  deleteImageById,
+  updateImageById,
 } from "../controllers/adminUpload.controller.js";
 
 const router = express.Router();
@@ -29,5 +31,7 @@ router.post("/upload", upload.single("file"), uploadFile);
 router.get("/resources", getAllResources);
 router.get("/resources/:id", getResourceById);
 router.post("/image-upload", upload.single("file"), UploadImage);
+router.put("/images/:id", updateImageById);
+router.delete("/images/:id", deleteImageById);
 
 export default router;

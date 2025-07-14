@@ -183,3 +183,60 @@ export const getAllImages = async (req, res) => {
   }
 };
 
+export const deleteImageById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const image = await HomeImage.findById(id);
+    if (!image) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    // Delete from Cloudinary (based on public_id)
+    const publicId = image.imageUrl.includes("/")
+      ? image.imageUrl.split("/").pop().split(".")[0]
+      : image.imageUrl;
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: "image",
+    });
+
+    // Delete from MongoDB
+    await HomeImage.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to delete image", error: error.message });
+  }
+};
+
+export const updateImageById = async (req, res) => {
+  const { id } = req.params;
+  const { title, description } = req.body;
+
+  try {
+    const image = await HomeImage.findById(id);
+    if (!image) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    image.title = title || image.title;
+    image.description = description || image.description;
+
+    await image.save();
+
+    res.status(200).json({
+      message: "Image updated successfully",
+      data: image,
+    });
+  } catch (error) {
+    console.error("Error updating image:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to update image", error: error.message });
+  }
+};
+
+
