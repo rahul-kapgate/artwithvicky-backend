@@ -6,6 +6,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import adminRoute from "./src/routes/admin.routes.js";
 import adminUploadRoutes from "./src/routes/adminUpload.routes.js";
 import mockTestRoutes from "./src/routes/mockTest.routes.js";
+import imagesRoutes from "./src/routes/imgaes.routes.js"
 
 dotenv.config();
 connectDB();
@@ -31,6 +32,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoute);
 app.use("/api/admin", adminUploadRoutes);
 app.use("/api/mocktest", mockTestRoutes); 
+app.use("/api/images", imagesRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);

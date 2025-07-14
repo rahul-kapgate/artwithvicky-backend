@@ -166,3 +166,20 @@ export const UploadImage = async (req, res) => {
     res.status(500).json({ message: "Upload failed", error: error.message });
   }
 };
+
+
+export const getAllImages = async (req, res) => {
+  try {
+    const images = await HomeImage.find().sort({ createdAt: -1 }); // newest first
+    res.status(200).json({
+      message: "Images fetched successfully",
+      data: images,
+    });
+  } catch (error) {
+    console.error("Error fetching images:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch images", error: error.message });
+  }
+};
+

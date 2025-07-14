@@ -6,7 +6,9 @@ import {
   getResourceById,
 } from "../controllers/adminUpload.controller.js";
 import fs from "fs";
-import { UploadImage } from "../controllers/adminUpload.controller.js";
+import {
+  UploadImage,
+} from "../controllers/adminUpload.controller.js";
 
 const router = express.Router();
 
