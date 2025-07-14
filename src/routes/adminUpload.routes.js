@@ -6,6 +6,7 @@ import {
   getResourceById,
 } from "../controllers/adminUpload.controller.js";
 import fs from "fs";
+import { UploadImage } from "../controllers/adminUpload.controller.js";
 
 const router = express.Router();
 
@@ -25,5 +26,6 @@ const upload = multer({
 router.post("/upload", upload.single("file"), uploadFile);
 router.get("/resources", getAllResources);
 router.get("/resources/:id", getResourceById);
+router.post("/image-upload", upload.single("file"), UploadImage);
 
 export default router;

@@ -1,6 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import Resource from "../models/Resource.model.js";
+import HomeImage from "../models/HomeImage.model.js";
 
 export const uploadFile = async (req, res) => {
   if (!req.file) {
@@ -121,5 +122,47 @@ export const getResourceById = async (req, res) => {
       message: "Failed to retrieve resource", 
       error: error.message 
     });
+  }
+};
+
+export const UploadImage = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const { title, description } = req.body;
+
+  try {
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "image",
+      folder: "home-images", // optional: organize uploads in a folder
+    });
+
+    // Remove the file from local storage
+    fs.unlinkSync(req.file.path);
+
+    // Save metadata to MongoDB
+    const image = new HomeImage({
+      title,
+      description,
+      imageUrl: result.secure_url, // use secure URL instead of public_id
+    });
+
+    await image.save();
+
+    res.status(200).json({
+      message: "File uploaded and saved successfully",
+      data: image,
+    });
+  } catch (error) {
+    console.error("Cloudinary upload failed:", error);
+
+    // Ensure temp file is removed in case of error
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    res.status(500).json({ message: "Upload failed", error: error.message });
   }
 };
