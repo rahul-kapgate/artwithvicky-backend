@@ -34,6 +34,10 @@ app.use("/api/admin", adminUploadRoutes);
 app.use("/api/mocktest", mockTestRoutes); 
 app.use("/api/images", imagesRoutes);
 
+app.get("/", (req, res) => {
+  res.send("HOME ROUTE Art with Vicky");
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
