@@ -122,6 +122,7 @@ export const refreshAccessToken = (req, res) => {
     const newAccessToken = generateAccessToken({
       userId: decoded.userId,
       email: decoded.email,
+      role: decoded.role,
     });
 
     res.status(200).json({ accessToken: newAccessToken });
