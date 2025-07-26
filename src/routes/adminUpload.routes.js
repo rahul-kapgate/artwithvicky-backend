@@ -4,6 +4,8 @@ import {
   uploadFile,
   getAllResources,
   getResourceById,
+  DeleteResourceById,
+  UpdateResourceById,
 } from "../controllers/adminUpload.controller.js";
 import fs from "fs";
 import {
@@ -33,5 +35,8 @@ router.get("/resources/:id", getResourceById);
 router.post("/image-upload", upload.single("file"), UploadImage);
 router.put("/images/:id", updateImageById);
 router.delete("/images/:id", deleteImageById);
+
+router.delete("/resources/:id", DeleteResourceById);
+router.put("/resources/:id", UpdateResourceById);
 
 export default router;

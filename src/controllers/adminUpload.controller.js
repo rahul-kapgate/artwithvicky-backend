@@ -97,6 +97,55 @@ export const getAllResources = async (req, res) => {
   }
 };
 
+export const DeleteResourceById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const resource = await Resource.findById(id);
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+    await cloudinary.uploader.destroy(resource.cloudinaryPublicId, {
+      resource_type: "raw",
+    });
+    await Resource.findByIdAndDelete(id);
+
+     res.status(200).json({ message: "Resource deleted successfully" });
+
+  } catch (error) {
+    console.error("Failed to delete resource:", error);
+    res.status(500).json({ 
+      message: "Failed to delete resource", 
+      error: error.message 
+    });
+  }
+}
+
+export const UpdateResourceById = async (req, res) => {
+  const { id } = req.params;
+  const { title, description } = req.body;
+
+  if (!title && !description) {
+    return res.status(400).json({ message: "Title and description are required" });
+  }
+
+  try {
+    const resource = await Resource.findById(id);
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+    resource.title = title || resource.title;
+    resource.description = description || resource.description;
+    await resource.save();
+    res.status(200).json({ message: "Resource updated successfully", data: resource });
+  } catch (error) {
+    console.error("Failed to update resource:", error);
+    res.status(500).json({ 
+      message: "Failed to update resource", 
+      error: error.message 
+    });
+  }
+}
+
 // Optional: Get single resource by ID
 export const getResourceById = async (req, res) => {
   try {
