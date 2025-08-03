@@ -4,6 +4,7 @@ import {
   getAllUsers,
   assignCourses,
   removeCourses,
+  getAllUsersWithMockTests 
 } from "../controllers/admin.controller.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.use(authenticateToken, isAdmin);
 router.get("/users", getAllUsers);
 router.post("/assign-courses", assignCourses);
 router.post("/remove-courses", removeCourses);
+router.get("/users-mock-tests", getAllUsersWithMockTests  )
 
 export default router;
