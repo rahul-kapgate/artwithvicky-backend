@@ -7,6 +7,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/tokenUtils.js"; 
+import MockTest from "../models/MockTest.model.js";
 
 // 1️⃣ Initiate Signup (Send OTP to email)
 export const initiateUserSignup = async (req, res) => {
@@ -131,6 +132,34 @@ export const refreshAccessToken = (req, res) => {
     res.status(403).json({ message: "Invalid or expired refresh token" });
   }
 };
+
+export const getUserProfile = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // 1️⃣ Fetch user info (excluding password)
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 2️⃣ Fetch user's mock tests
+    const mockTests = await MockTest.find({ user: userId }).sort({
+      createdAt: -1,
+    });
+
+    // 3️⃣ Combine and respond
+    res.status(200).json({
+      message: "User profile fetched successfully",
+      user,
+      mockTests,
+    });
+  } catch (err) {
+    console.error("❌ User Profile Fetch Error:", err.message);
+    res.status(500).json({ message: "Failed to fetch user profile" });
+  }
+};
+
 
 // 1️⃣ Initiate Forgot Password (Send OTP)
 export const initiateForgotPassword = async (req, res) => {

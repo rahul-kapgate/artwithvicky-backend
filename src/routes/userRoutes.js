@@ -6,6 +6,7 @@ import {
   verifyUserSignup,
   initiateForgotPassword,  
   verifyForgotPassword, 
+  getUserProfile,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -17,5 +18,7 @@ router.post("/refresh-token", refreshAccessToken);
 
 router.post("/forgot-password/initiate", initiateForgotPassword);
 router.post("/forgot-password/verify", verifyForgotPassword);
+
+router.get("/profile/:userId", getUserProfile);
 
 export default router;
