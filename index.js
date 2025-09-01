@@ -8,6 +8,7 @@ import adminUploadRoutes from "./src/routes/adminUpload.routes.js";
 import mockTestRoutes from "./src/routes/mockTest.routes.js";
 import imagesRoutes from "./src/routes/imgaes.routes.js"
 import videoRoute from "./src/routes/video.routes.js";
+import resourceRoutes from "./src/routes/resource.routes.js"; 
 
 dotenv.config();
 connectDB();
@@ -35,6 +36,7 @@ app.use("/api/admin", adminUploadRoutes);
 app.use("/api/mocktest", mockTestRoutes); 
 app.use("/api/images", imagesRoutes);
 app.use("/api/videos", videoRoute);
+app.use("/api/resources", resourceRoutes);
 
 app.get("/", (req, res) => {
   res.send("HOME ROUTE Art with Vicky");
