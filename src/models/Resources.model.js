@@ -1,24 +1,29 @@
 import mongoose from "mongoose";
 
 
-const resourcesSchema = new mongoose.Schema({
+const resourcesSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
     },
     link: {
-        type: String,
-        required: true,
-    },   
-},
-{
+      type: String,
+      required: true,
+    },
+  },
+  {
     timestamps: true,
-}
-)
+  }
+);
 
 const Resources = mongoose.model("Resources", resourcesSchema);
 

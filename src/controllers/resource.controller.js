@@ -1,14 +1,14 @@
 import Resources from "../models/Resources.model.js";
 
  const createResource = async (req, res) => {
-    const { title, description, link } = req.body;
+    const { title, description, type,  link } = req.body;
 
-    if (!title && !description && !link) {
+    if (!title && !description && !type && !link) {
         return res.status(400).json({ message: "Title, description and link are required" });
     }
 
     try { 
-        const resource = await Resources.create({ title, description, link });
+        const resource = await Resources.create({ title, description,type, link });
         res.status(201).json({ message: "Resource created successfully", resource });
     } catch (error) {
         res.status(500).json({ message: "Failed to create resource", error: error.message });
@@ -37,9 +37,9 @@ const getResourceById = async (req, res) => {
 
 const updateResourceById = async (req, res) => {
     const { id } = req.params;
-    const { title, description, link } = req.body;
+    const { title, description,type, link } = req.body;
     try {
-        const resource = await Resources.findByIdAndUpdate(id, { title, description, link }, { new: true });
+        const resource = await Resources.findByIdAndUpdate(id, { title, description,type, link }, { new: true });
         res.status(200).json({ message: "Resource updated successfully", resource });
     } catch (error) {
         res.status(500).json({ message: "Failed to update resource", error: error.message });
