@@ -1,35 +1,33 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import dotenv from "dotenv";
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  port: 587,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Initialize Resend client
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendOtpToEmail = async (email, otp) => {
+  try {
 
-  console.log("Sending OTP to email:", email, "OTP:", otp);
+    const response = await resend.emails.send({
+      from: "onboarding@resend.dev",// ✅ You can use your custom domain later
+      to: email,
+      subject: "Verification Code - Artistic Vicky",
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Dear User,</h2>
+          <p>Your One-Time Password (OTP) is:</p>
+          <h1 style="color: #4f46e5;">${otp}</h1>
+          <p>This code is valid for <strong>5 minutes</strong>. Please do not share it with anyone.</p>
+          <br />
+          <p>If you did not request this, please disregard this message.</p>
+          <p>Best regards,<br /><strong>Artistic Vicky Team</strong></p>
+        </div>
+      `,
+    });
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Verification Code - Artistic Vicky",
-    text: `Dear User,
-
-Your One-Time Password (OTP) is: ${otp}
-
-This code is valid for 5 minutes. Please do not share it with anyone.
-
-If you did not request this, please disregard this message.
-
-Best regards,  
-Artistic Vicky Team`,
-  };
-
-  await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent successfully via Resend:", response.id || response);
+  } catch (error) {
+    console.error("❌ Resend Email Send Error:", error.message);
+    throw new Error("Failed to send OTP email");
+  }
 };

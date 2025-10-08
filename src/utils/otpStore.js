@@ -8,15 +8,13 @@ export const storeOtp = async (email, data) => {
   await redis.set(key, value);
   await redis.expire(key, 300); // TTL: 5 mins
 
-  console.log(`✅ OTP stored for ${email}`);
-  console.log("🔐 Stored JSON string:", value);
+
 };
 
 export const getOtpData = async (email, otp) => {
   const key = `otp:${email}`;
   const raw = await redis.get(key);
 
-  console.log("🔍 Raw from Redis:", raw);
 
   if (!raw) return null;
 
@@ -28,8 +26,7 @@ export const getOtpData = async (email, otp) => {
     return null;
   }
 
-  console.log("Parsed data:", data);
-  console.log("Provided OTP:", otp);
+
 
   if (parseInt(data.otp) !== parseInt(otp)) {
     console.log("❌ OTP mismatch");
