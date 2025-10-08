@@ -174,8 +174,9 @@ export const initiateForgotPassword = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
 
     await storeOtp(email, { otp }); // just store OTP for reset
-
+    console.log("OTP stored for email:", email, "OTP:", otp);
     await sendOtpToEmail(email, otp);
+    console.log("OTP sent to email:", email, "OTP:", otp);
 
     res.status(200).json({ message: "OTP sent to email for password reset" });
   } catch (err) {
