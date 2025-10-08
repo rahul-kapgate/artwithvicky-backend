@@ -86,6 +86,9 @@ export const getAllUsersWithMockTests = async (req, res) => {
     // Group mock tests by userId
     const mockTestsByUserId = {};
     mockTests.forEach(test => {
+
+      if (!test.user || !test.user._id) return; // skip invalid entries
+
       const uid = test.user._id.toString();
       if (!mockTestsByUserId[uid]) {
         mockTestsByUserId[uid] = [];
