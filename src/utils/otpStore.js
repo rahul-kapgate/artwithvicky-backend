@@ -1,6 +1,7 @@
 import redis from "../config/redisClient.js";
 
 export const storeOtp = async (email, data) => {
+  console.log("Storing OTP for email:", email);
   const key = `otp:${email}`;
   const value = JSON.stringify(data); // Serialize to JSON string
 
@@ -12,6 +13,7 @@ export const storeOtp = async (email, data) => {
 };
 
 export const getOtpData = async (email, otp) => {
+  console.log("Getting OTP data for email:", email);
   const key = `otp:${email}`;
   const raw = await redis.get(key);
 

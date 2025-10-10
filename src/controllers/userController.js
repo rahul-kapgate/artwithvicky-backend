@@ -13,6 +13,8 @@ import MockTest from "../models/MockTest.model.js";
 export const initiateUserSignup = async (req, res) => {
   const { fullName, mobile, email, password } = req.body;
 
+  console.log("Initiating user signup");
+
   try {
     const existing = await User.findOne({ email });
     if (existing) {

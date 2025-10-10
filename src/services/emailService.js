@@ -33,20 +33,53 @@
 //   await transporter.sendMail(mailOptions);
 // };
 
-import { Resend } from "resend";
+// import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
+// export const sendOtpToEmail = async (email, otp) => {
+//   try {
+//     await resend.emails.send({
+//       from: "Artistic Vicky <onboarding@resend.dev>", // no domain needed
+//       to: email,
+//       subject: "Verification Code - Artistic Vicky",
+//       text: `Your OTP is: ${otp}\n\nValid for 5 minutes.`,
+//     });
+//     console.log("✅ Email sent successfully", email, otp);
+//   } catch (error) {
+//     console.error("❌ Error sending email:", error.message);
+//   }
+// };
+
+import axios from "axios";
 
 export const sendOtpToEmail = async (email, otp) => {
   try {
-    await resend.emails.send({
-      from: "Artistic Vicky <onboarding@resend.dev>", // no domain needed
-      to: email,
-      subject: "Verification Code - Artistic Vicky",
-      text: `Your OTP is: ${otp}\n\nValid for 5 minutes.`,
-    });
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: { name: "Artistic Vicky", email: "artisticvicky369@gmail.com" },
+        to: [{ email }],
+        subject: "Verification Code - Artistic Vicky",
+        textContent: `Dear User,
+
+Your One-Time Password (OTP) is: ${otp}
+
+This code is valid for 5 minutes. Please do not share it with anyone.
+
+Best regards,
+Artistic Vicky Team`,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     console.log("✅ Email sent successfully");
   } catch (error) {
-    console.error("❌ Error sending email:", error.message);
+    console.error("❌ Error sending email:", error.response?.data || error.message);
   }
 };
