@@ -41,8 +41,10 @@ app.use("/api/resources", resourceRoutes);
 app.use("/api/courses", courseRoutes);
 
 app.get("/", (req, res) => {
+  console.log("✅ Home route accessed");
   res.send("HOME ROUTE Art with Vicky");
 });
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
